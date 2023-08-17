@@ -25,7 +25,7 @@ export default function Layout({ children, sideBar }: IProps) {
   return (
     <div className="grow items-center flex-col">
       <Navbar />
-      <div className="flex justify-between w-full min-h-screen">
+      <div className="flex justify-between w-full min-h-[calc(100vh-70px)]">
         {sideBar && sideBar}
         {children}
       </div>
