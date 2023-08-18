@@ -10,6 +10,8 @@ export const userUpdater = {
         "Content-type": "multipart/form-data",
       },
     }),
+  userUpdaterByAdmin: async (userId: string, data: any) =>
+    await axiosInstance.put<TUser>(`/users/admin/${userId}`, data),
 };
 
 export const categoryUpdater = {
