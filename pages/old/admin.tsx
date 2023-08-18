@@ -1,12 +1,11 @@
 /* eslint-disable react/function-component-definition */
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useAuth } from "../src/context/UserContext";
-import authProvider from "../src/utils/authProviderReactAdmin";
-import AdminApp from "../src/components/admin/AdminApp";
-import Loader from "../src/components/structureShared/Loader";
-import { NextPageWithLayout } from "./_app";
-import Layout from "../src/components/layout/Layout";
+import { useAuth } from "../../src/context/UserContext";
+import AdminApp from "../../src/components/admin/AdminApp";
+import Loader from "../../src/components/structureShared/Loader";
+import { NextPageWithLayout } from "../_app";
+import Layout from "../../src/components/layout/Layout";
 
 // type Props = {};
 

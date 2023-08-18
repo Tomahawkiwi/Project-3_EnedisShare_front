@@ -73,7 +73,7 @@ function Navbar() {
   }
 
   return (
-    <div className="w-full flex justify-between ">
+    <div className="w-full flex justify-between">
       {/* Modal component */}
       <Modal isShowing={isShowing} hide={toggle}>
         <div className="flex-x-center space-y-3" ref={ref}>
