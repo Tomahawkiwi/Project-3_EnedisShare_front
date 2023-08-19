@@ -15,6 +15,7 @@
     "@emotion/styled": "^11.11.0",
     "@jidayyy/useonclickoutside": "^1.0.1",
     "@mantine/hooks": "^5.10.2",
+    "@mui/icons-material": "^5.14.3",
     "@mui/material": "^5.14.5",
     "@mui/x-data-grid": "^6.11.2",
     "@ntegral/react-owl-carousel": "^1.0.1",
@@ -38,6 +39,7 @@
     "react-slick": "^0.29.0",
     "slick-carousel": "^1.8.1",
     "usehooks-ts": "^2.9.1",
+    "uuid": "^9.0.0",
     "webpack": "^5.75.0",
     "zod": "^3.20.2"
   },
@@ -48,6 +50,7 @@
     "@types/react-dom": "18.0.9",
     "@types/react-modal": "^3.13.1",
     "@types/react-slick": "^0.23.10",
+    "@types/uuid": "^9.0.2",
     "autoprefixer": "^10.4.13",
     "eslint": "8.29.0",
     "eslint-config-airbnb": "^19.0.4",
