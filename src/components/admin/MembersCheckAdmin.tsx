@@ -20,7 +20,7 @@ type TUser = {
   };
 };
 
-function AdminAppV2({ data }: TData) {
+function MembersCheckAdmin({ data }: TData) {
   const rows = data.map((user: TUser) => ({
     id: user.id,
     firstname: user.firstname,
@@ -69,25 +69,22 @@ function AdminAppV2({ data }: TData) {
   }, []);
 
   return (
-    <div className="w-10/12 flex justify-center border border-blue-enedis">
-      <div
-        style={{
-          height: 700,
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <DataGrid
-          editMode="row"
-          rows={rows}
-          columns={columns}
-          processRowUpdate={processRowUpdate}
-          onProcessRowUpdateError={handleProcessRowUpdateError}
-        />
-      </div>
+    <div
+      style={{
+        height: 700,
+        display: "flex",
+        justifyContent: "center",
+      }}
+    >
+      <DataGrid
+        editMode="row"
+        rows={rows}
+        columns={columns}
+        processRowUpdate={processRowUpdate}
+        onProcessRowUpdateError={handleProcessRowUpdateError}
+      />
     </div>
   );
 }
 
-export default AdminAppV2;
+export default MembersCheckAdmin;
