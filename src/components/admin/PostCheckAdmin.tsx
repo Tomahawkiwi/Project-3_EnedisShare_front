@@ -1,80 +1,94 @@
-/* eslint-disable no-param-reassign */
+/* eslint-disable react/jsx-boolean-value */
 import React, { useCallback } from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import {
-  GridRowsProp,
   GridRowModesModel,
   GridRowModes,
   DataGrid,
   GridColDef,
-  GridToolbarContainer,
   GridActionsCellItem,
   GridEventListener,
   GridRowId,
   GridRowModel,
   GridRowEditStopReasons,
+  GridRenderCellParams,
+  useGridApiContext,
 } from "@mui/x-data-grid";
-import { v4 as uuid } from "uuid";
-import { spaceUpdater } from "../../utils/updater";
-import { spaceDeleter } from "../../utils/deleter";
-import { spacePoster } from "../../utils/poster";
-import SpaceImage from "./SpaceImage";
+import { Select, SelectChangeEvent } from "@mui/material";
+import { postUpdater } from "../../utils/updater";
+import { postDeleter } from "../../utils/deleter";
 
-type TDataProps = {
+type PostCheckAdminProps = {
   data: any;
 };
 
-type TSpace = {
+type TPosts = {
   id: string;
-  name: string;
-  description: string;
-  imageUrl: string;
+  title: string;
+  content: string;
+  author: {
+    firstname: string;
+    lastname: string;
+  };
+  isDisabled: boolean;
+  category: {
+    name: string;
+    space: {
+      name: string;
+    };
+  };
 };
 
-interface EditToolbarProps {
-  setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
-  setRowModesModel: (
-    newModel: (oldModel: GridRowModesModel) => GridRowModesModel
-  ) => void;
-}
+function SelectEditInputCell(props: GridRenderCellParams) {
+  const { id, value, field } = props;
+  const apiRef = useGridApiContext();
 
-function EditToolbar(props: EditToolbarProps) {
-  const { setRows, setRowModesModel } = props;
+  const handleChange = async (event: SelectChangeEvent) => {
+    const newValue = event.target.value === "true";
 
-  const handleClick = () => {
-    const id = uuid();
-    setRows((oldRows) => [
-      ...oldRows,
-      { id, name: "", description: "", ImageUrl: "", isNew: true },
-    ]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
-    }));
+    await apiRef.current.setEditCellValue({
+      id,
+      field,
+      value: newValue,
+    });
+    apiRef.current.stopCellEditMode({ id, field });
   };
 
   return (
-    <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Ajouter un espace
-      </Button>
-    </GridToolbarContainer>
+    <Box sx={{ display: "flex", alignItems: "center", pr: 2 }}>
+      <Select
+        value={value}
+        onChange={handleChange}
+        size="small"
+        sx={{ height: 1 }}
+        native
+        autoFocus
+      >
+        <option value="true">Oui</option>
+        <option value="false">Non</option>
+      </Select>
+    </Box>
   );
 }
 
-function EspaceCheckAdmin({ data }: TDataProps) {
+const renderSelectEditInputCell: GridColDef["renderCell"] = (params) => {
+  return <SelectEditInputCell {...params} />;
+};
+
+function PostCheckAdmin({ data }: PostCheckAdminProps) {
   const [rows, setRows] = React.useState(
-    data.map((space: TSpace) => ({
-      id: space.id,
-      name: space.name,
-      description: space.description,
-      imageUrl: space.imageUrl,
+    data.map((post: TPosts) => ({
+      id: post.id,
+      title: post.title,
+      content: post.content,
+      author: `${post.author.firstname} ${post.author.lastname}`,
+      categorie: post.category.name,
+      space: post.category.space.name,
+      isDisabled: post.isDisabled === true ? "Oui" : "Non",
     }))
   );
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
@@ -97,14 +111,14 @@ function EspaceCheckAdmin({ data }: TDataProps) {
 
   const handleSaveClick = (id: GridRowId) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-    const updatedSpace = rows.find((row: TSpace) => row.id === id);
+    const updatedSpace = rows.find((row: TPosts) => row.id === id);
     return updatedSpace;
   };
 
   const handleDeleteClick = (id: GridRowId) => () => {
-    setRows(rows.filter((row: TSpace) => row.id !== id));
-    const SpaceToDelete = spaceDeleter.delete(id as string);
-    return SpaceToDelete;
+    setRows(rows.filter((row: TPosts) => row.id !== id));
+    const postToDelete = postDeleter.delete(id as string);
+    return postToDelete;
   };
 
   const handleCancelClick = (id: GridRowId) => () => {
@@ -113,37 +127,23 @@ function EspaceCheckAdmin({ data }: TDataProps) {
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
 
-    const editedRow = rows.find((row: TSpace) => row.id === id);
+    const editedRow = rows.find((row: TPosts) => row.id === id);
     if (editedRow!.isNew) {
-      setRows(rows.filter((row: TSpace) => row.id !== id));
+      setRows(rows.filter((row: TPosts) => row.id !== id));
     }
   };
 
   const processRowUpdate = (newRow: GridRowModel) => {
-    if (newRow.isNew) {
-      const PayloadNewSpace = {
-        name: newRow.name,
-        description: newRow.description,
-        imageUrl: newRow.imageUrl || "Donnez une url d'image",
-        ownerId: "3cddf358-71fb-4676-af8c-33293801bec0",
-        siteId: "88aab5a1-4d7d-412e-9da2-0f082e569dfd",
-      };
-      const newSpace = spacePoster.post(PayloadNewSpace);
-      return newSpace;
-    }
-    const rowToUpdate = {
-      id: newRow.id,
-      name: newRow.name,
-      description: newRow.description,
+    const payload = {
+      isDisabled:
+        typeof newRow.isDisabled === "string"
+          ? newRow.isDisabled.toLowerCase() !== "true"
+          : Boolean(newRow.isDisabled),
     };
-    setRows(
-      rows.map((row: TSpace) => (row.id === newRow.id ? rowToUpdate : row))
-    );
-    const updatedSpace = spaceUpdater.spaceUpdaterByAdmin(
-      rowToUpdate.id,
-      rowToUpdate
-    );
-    return updatedSpace;
+    setRows(rows.map((row: TPosts) => (row.id === newRow.id ? newRow : row)));
+    const updatedPost = postUpdater.postUpdaterByAdmin(newRow.id, payload);
+
+    return updatedPost;
   };
 
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
@@ -155,22 +155,33 @@ function EspaceCheckAdmin({ data }: TDataProps) {
   }, []);
 
   const columns: GridColDef[] = [
-    { field: "name", headerName: "Nom", width: 200, editable: true },
+    { field: "title", headerName: "Titre", width: 220, editable: true },
     {
-      field: "description",
-      headerName: "Description",
-      cellClassName: "!whitespace-normal text-left",
-      width: 250,
-      editable: true,
+      field: "content",
+      headerName: "Contenu",
+      width: 220,
     },
     {
-      field: "imageUrl",
-      headerName: "Couverture",
-      width: 160,
-      editable: false,
-      renderCell: (params) => {
-        return <SpaceImage params={params} />;
-      },
+      field: "author",
+      headerName: "Auteur",
+      width: 300,
+    },
+    {
+      field: "categorie",
+      headerName: "Categorie",
+      width: 220,
+    },
+    {
+      field: "space",
+      headerName: "Espace",
+      width: 220,
+    },
+    {
+      field: "isDisabled",
+      headerName: "Desactiver",
+      width: 220,
+      renderEditCell: renderSelectEditInputCell,
+      editable: true,
     },
     {
       field: "actions",
@@ -223,7 +234,7 @@ function EspaceCheckAdmin({ data }: TDataProps) {
   return (
     <Box
       sx={{
-        height: "fit-content",
+        height: 500,
         width: "100%",
         "& .actions": {
           color: "text.secondary",
@@ -242,17 +253,12 @@ function EspaceCheckAdmin({ data }: TDataProps) {
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
         onProcessRowUpdateError={handleProcessRowUpdateError}
-        slots={{
-          toolbar: EditToolbar,
-        }}
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
-        className="!text-desk-xs(date)"
-        rowHeight={100}
       />
     </Box>
   );
 }
 
-export default EspaceCheckAdmin;
+export default PostCheckAdmin;

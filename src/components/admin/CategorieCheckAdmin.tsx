@@ -1,80 +1,53 @@
-/* eslint-disable no-param-reassign */
 import React, { useCallback } from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import {
-  GridRowsProp,
   GridRowModesModel,
   GridRowModes,
   DataGrid,
   GridColDef,
-  GridToolbarContainer,
   GridActionsCellItem,
   GridEventListener,
   GridRowId,
   GridRowModel,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-import { v4 as uuid } from "uuid";
-import { spaceUpdater } from "../../utils/updater";
-import { spaceDeleter } from "../../utils/deleter";
-import { spacePoster } from "../../utils/poster";
-import SpaceImage from "./SpaceImage";
+import { CategoryDeleter } from "../../utils/deleter";
+import { categoryUpdater } from "../../utils/updater";
 
-type TDataProps = {
+type CategorieCheckAdminProps = {
   data: any;
 };
 
-type TSpace = {
+type Tcategorie = {
   id: string;
   name: string;
+  space: {
+    name: string;
+  };
   description: string;
-  imageUrl: string;
+  owner: {
+    firstname: string;
+    lastname: string;
+  };
+  isGeneral: boolean;
 };
 
-interface EditToolbarProps {
-  setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
-  setRowModesModel: (
-    newModel: (oldModel: GridRowModesModel) => GridRowModesModel
-  ) => void;
-}
-
-function EditToolbar(props: EditToolbarProps) {
-  const { setRows, setRowModesModel } = props;
-
-  const handleClick = () => {
-    const id = uuid();
-    setRows((oldRows) => [
-      ...oldRows,
-      { id, name: "", description: "", ImageUrl: "", isNew: true },
-    ]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
-    }));
-  };
-
-  return (
-    <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Ajouter un espace
-      </Button>
-    </GridToolbarContainer>
-  );
-}
-
-function EspaceCheckAdmin({ data }: TDataProps) {
+export default function CategorieCheckAdmin({
+  data,
+}: CategorieCheckAdminProps) {
+  console.log(data);
   const [rows, setRows] = React.useState(
-    data.map((space: TSpace) => ({
-      id: space.id,
-      name: space.name,
-      description: space.description,
-      imageUrl: space.imageUrl,
+    data.map((categorie: Tcategorie) => ({
+      id: categorie.id,
+      name: categorie.name,
+      description: categorie.description,
+      owner: `${categorie.owner.firstname} ${categorie.owner.lastname}`,
+      space: categorie.space.name,
+      isGeneral: categorie.isGeneral,
     }))
   );
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
@@ -97,14 +70,14 @@ function EspaceCheckAdmin({ data }: TDataProps) {
 
   const handleSaveClick = (id: GridRowId) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-    const updatedSpace = rows.find((row: TSpace) => row.id === id);
+    const updatedSpace = rows.find((row: Tcategorie) => row.id === id);
     return updatedSpace;
   };
 
   const handleDeleteClick = (id: GridRowId) => () => {
-    setRows(rows.filter((row: TSpace) => row.id !== id));
-    const SpaceToDelete = spaceDeleter.delete(id as string);
-    return SpaceToDelete;
+    setRows(rows.filter((row: Tcategorie) => row.id !== id));
+    const CategorieToDelete = CategoryDeleter.delete(id as string);
+    return CategorieToDelete;
   };
 
   const handleCancelClick = (id: GridRowId) => () => {
@@ -113,37 +86,26 @@ function EspaceCheckAdmin({ data }: TDataProps) {
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
 
-    const editedRow = rows.find((row: TSpace) => row.id === id);
+    const editedRow = rows.find((row: Tcategorie) => row.id === id);
     if (editedRow!.isNew) {
-      setRows(rows.filter((row: TSpace) => row.id !== id));
+      setRows(rows.filter((row: Tcategorie) => row.id !== id));
     }
   };
 
   const processRowUpdate = (newRow: GridRowModel) => {
-    if (newRow.isNew) {
-      const PayloadNewSpace = {
-        name: newRow.name,
-        description: newRow.description,
-        imageUrl: newRow.imageUrl || "Donnez une url d'image",
-        ownerId: "3cddf358-71fb-4676-af8c-33293801bec0",
-        siteId: "88aab5a1-4d7d-412e-9da2-0f082e569dfd",
-      };
-      const newSpace = spacePoster.post(PayloadNewSpace);
-      return newSpace;
-    }
     const rowToUpdate = {
       id: newRow.id,
       name: newRow.name,
       description: newRow.description,
     };
     setRows(
-      rows.map((row: TSpace) => (row.id === newRow.id ? rowToUpdate : row))
+      rows.map((row: Tcategorie) => (row.id === newRow.id ? rowToUpdate : row))
     );
-    const updatedSpace = spaceUpdater.spaceUpdaterByAdmin(
+    const updatedCategorie = categoryUpdater.updateByAdmin(
       rowToUpdate.id,
       rowToUpdate
     );
-    return updatedSpace;
+    return rowToUpdate;
   };
 
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
@@ -153,24 +115,28 @@ function EspaceCheckAdmin({ data }: TDataProps) {
   const handleProcessRowUpdateError = useCallback((error: Error) => {
     console.log(error);
   }, []);
-
   const columns: GridColDef[] = [
-    { field: "name", headerName: "Nom", width: 200, editable: true },
+    { field: "name", headerName: "Name", width: 220, editable: true },
+    {
+      field: "space",
+      headerName: "Space",
+      width: 220,
+    },
     {
       field: "description",
       headerName: "Description",
-      cellClassName: "!whitespace-normal text-left",
-      width: 250,
+      width: 300,
       editable: true,
     },
     {
-      field: "imageUrl",
-      headerName: "Couverture",
-      width: 160,
-      editable: false,
-      renderCell: (params) => {
-        return <SpaceImage params={params} />;
-      },
+      field: "owner",
+      headerName: "Owner",
+      width: 220,
+    },
+    {
+      field: "isGeneral",
+      headerName: "Is General",
+      width: 220,
     },
     {
       field: "actions",
@@ -223,7 +189,7 @@ function EspaceCheckAdmin({ data }: TDataProps) {
   return (
     <Box
       sx={{
-        height: "fit-content",
+        height: 500,
         width: "100%",
         "& .actions": {
           color: "text.secondary",
@@ -242,17 +208,10 @@ function EspaceCheckAdmin({ data }: TDataProps) {
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
         onProcessRowUpdateError={handleProcessRowUpdateError}
-        slots={{
-          toolbar: EditToolbar,
-        }}
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
-        className="!text-desk-xs(date)"
-        rowHeight={100}
       />
     </Box>
   );
 }
-
-export default EspaceCheckAdmin;
