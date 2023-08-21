@@ -18,9 +18,22 @@ export const categoryUpdater = {
   disable: async (categoryId: string) =>
     (await axiosInstance.put<TCategory>(`/categories/${categoryId}/disable`))
       .data,
+
+  updateByAdmin: async (categoryId: string, data: any) =>
+    await axiosInstance.put(`/categories/admin/${categoryId}`, data),
 };
 
 export const spaceUpdater = {
   spaceUpdaterByAdmin: async (spaceId: string, data: any) =>
     await axiosInstance.put<TSpace>(`/spaces/admin/${spaceId}`, data),
+};
+
+export const postUpdater = {
+  postUpdaterByAdmin: async (postId: string, data: any) => {
+    try {
+      await axiosInstance.put(`/posts/admin/${postId}`, data);
+    } catch (error) {
+      console.error("Error updating post:", error);
+    }
+  },
 };

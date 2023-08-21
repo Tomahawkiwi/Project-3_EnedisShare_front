@@ -86,6 +86,8 @@ export const siteFetcher = {
 };
 
 export const postFetcher = {
+  getAll: async () => (await axiosInstance.get("/posts/admin")).data,
+
   getLatestPostBySpaceWithImage: async ({ spaceId }: { spaceId: string }) =>
     (
       await axiosInstance.get<TPost[]>(
