@@ -17,7 +17,6 @@ function SpacesAdmin() {
   if (error || !AllSpaces) {
     return <p>Sorry something went wrong</p>;
   }
-  console.log(AllSpaces);
   return (
     <div>
       <EspaceCheckAdmin data={AllSpaces} />
