@@ -1,5 +1,6 @@
-import { DataGrid, GridRowModel } from "@mui/x-data-grid";
+import { DataGrid, GridRenderCellParams, GridRowModel } from "@mui/x-data-grid";
 import { useCallback } from "react";
+import { Avatar } from "@mui/material";
 import { userUpdater } from "../../utils/updater";
 
 type TData = {
@@ -34,29 +35,39 @@ function MembersCheckAdmin({ data }: TData) {
   }));
 
   const columns = [
-    { field: "firstname", headerName: "Firstname", width: 180 },
-    { field: "lastname", headerName: "Lastname", width: 180 },
-    { field: "email", headerName: "Email", width: 220, editable: true },
+    {
+      field: "imageUrl",
+      headerName: "Avatar",
+      width: 70,
+      renderCell: (params: GridRenderCellParams) => {
+        return (
+          <div className="w-full h-full flex-all-center">
+            <Avatar
+              alt={`${params.row.firstname} ${params.row.lastname}`}
+              src={params.value}
+            />
+          </div>
+        );
+      },
+    },
+    { field: "firstname", headerName: "Firstname", width: 100 },
+    { field: "lastname", headerName: "Lastname", width: 100 },
+    { field: "email", headerName: "Email", width: 200, editable: true },
     {
       field: "birthday",
       headerName: "Birthday",
       type: "date",
-      width: 130,
+      width: 90,
       editable: true,
     },
-    { field: "role", headerName: "Role", width: 160, editable: true },
+    { field: "role", headerName: "Role", width: 90, editable: true },
     {
       field: "workLocation",
       headerName: "Work Location",
-      width: 150,
+      width: 90,
       editable: true,
     },
-    { field: "teamName", headerName: "Team Name", width: 220, editable: true },
-    {
-      field: "imageUrl",
-      headerName: "Image Url",
-      width: 180,
-    },
+    { field: "teamName", headerName: "Team Name", width: 140, editable: true },
   ];
 
   const processRowUpdate = useCallback(async (newRow: GridRowModel) => {
@@ -82,6 +93,7 @@ function MembersCheckAdmin({ data }: TData) {
         columns={columns}
         processRowUpdate={processRowUpdate}
         onProcessRowUpdateError={handleProcessRowUpdateError}
+        className="!text-desk-xs(date)"
       />
     </div>
   );

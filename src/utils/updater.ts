@@ -26,6 +26,22 @@ export const categoryUpdater = {
 export const spaceUpdater = {
   spaceUpdaterByAdmin: async (spaceId: string, data: any) =>
     await axiosInstance.put<TSpace>(`/spaces/admin/${spaceId}`, data),
+  spaceImageUpdaterByAdmin: async (spaceId: string, formData: FormData) =>
+    await axiosInstance.put<TSpace>(`/spaces/admin/${spaceId}`, formData, {
+      headers: {
+        "Content-type": "multipart/form-data",
+      },
+    }),
+};
+
+export const postUpdater = {
+  postUpdaterByAdmin: async (postId: string, data: any) => {
+    try {
+      await axiosInstance.put(`/posts/admin/${postId}`, data);
+    } catch (error) {
+      console.error("Error updating post:", error);
+    }
+  },
 };
 
 export const postUpdater = {

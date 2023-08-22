@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import React, { useCallback } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -23,6 +24,7 @@ import { v4 as uuid } from "uuid";
 import { spaceUpdater } from "../../utils/updater";
 import { spaceDeleter } from "../../utils/deleter";
 import { spacePoster } from "../../utils/poster";
+import SpaceImage from "./SpaceImage";
 
 type TDataProps = {
   data: any;
@@ -60,11 +62,12 @@ function EditToolbar(props: EditToolbarProps) {
   return (
     <GridToolbarContainer>
       <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add record
+        Ajouter un espace
       </Button>
     </GridToolbarContainer>
   );
 }
+
 function EspaceCheckAdmin({ data }: TDataProps) {
   const [rows, setRows] = React.useState(
     data.map((space: TSpace) => ({
@@ -132,7 +135,6 @@ function EspaceCheckAdmin({ data }: TDataProps) {
       id: newRow.id,
       name: newRow.name,
       description: newRow.description,
-      imageUrl: newRow.imageUrl,
     };
     setRows(
       rows.map((row: TSpace) => (row.id === newRow.id ? rowToUpdate : row))
@@ -153,18 +155,22 @@ function EspaceCheckAdmin({ data }: TDataProps) {
   }, []);
 
   const columns: GridColDef[] = [
-    { field: "name", headerName: "Name", width: 220, editable: true },
+    { field: "name", headerName: "Nom", width: 200, editable: true },
     {
       field: "description",
       headerName: "Description",
-      width: 300,
+      cellClassName: "!whitespace-normal text-left",
+      width: 250,
       editable: true,
     },
     {
       field: "imageUrl",
-      headerName: "Image Url",
-      width: 220,
-      editable: true,
+      headerName: "Couverture",
+      width: 160,
+      editable: false,
+      renderCell: (params) => {
+        return <SpaceImage params={params} />;
+      },
     },
     {
       field: "actions",
@@ -217,7 +223,7 @@ function EspaceCheckAdmin({ data }: TDataProps) {
   return (
     <Box
       sx={{
-        height: 500,
+        height: "fit-content",
         width: "100%",
         "& .actions": {
           color: "text.secondary",
@@ -242,6 +248,8 @@ function EspaceCheckAdmin({ data }: TDataProps) {
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
+        className="!text-desk-xs(date)"
+        rowHeight={100}
       />
     </Box>
   );
