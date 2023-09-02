@@ -53,3 +53,7 @@ export const commentFetcher = {
 export const spacePoster = {
   post: async (data: any) => await axiosInstance.post("/spaces/admin", data),
 };
+
+export const userPoster = {
+  post: async (data: any) => await axiosInstance.post("/users", data),
+};

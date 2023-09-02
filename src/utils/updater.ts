@@ -43,13 +43,3 @@ export const postUpdater = {
     }
   },
 };
-
-export const postUpdater = {
-  postUpdaterByAdmin: async (postId: string, data: any) => {
-    try {
-      await axiosInstance.put(`/posts/admin/${postId}`, data);
-    } catch (error) {
-      console.error("Error updating post:", error);
-    }
-  },
-};

@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import MembersCheckAdmin from "../admin/MembersCheckAdmin";
-import { userFetcher } from "../../utils/fetcher";
+import { teamFetcher, userFetcher } from "../../utils/fetcher";
 import LoaderFocus from "../structureShared/LoaderFocus";
 
 function UsersAdmin() {
@@ -11,6 +11,20 @@ function UsersAdmin() {
     data: Alluser,
   } = useQuery(["getAllUser"], () => userFetcher.getAll());
 
+  const {
+    isLoading: isLoadingTeam,
+    error: errorTeam,
+    data: AllTeams,
+  } = useQuery(["getAllTeams"], () => teamFetcher.getAll());
+
+  if (isLoadingTeam) {
+    return <LoaderFocus />;
+  }
+
+  if (errorTeam) {
+    return <p>Sorry something went wrong</p>;
+  }
+
   if (isLoading) {
     return <LoaderFocus />;
   }
@@ -18,7 +32,7 @@ function UsersAdmin() {
     return <p>Sorry something went wrong</p>;
   }
 
-  return <MembersCheckAdmin data={Alluser} />;
+  return <MembersCheckAdmin data={Alluser} teams={AllTeams} />;
 }
 
 export default UsersAdmin;
