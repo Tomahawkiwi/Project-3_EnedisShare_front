@@ -22,6 +22,8 @@ export const userFetcher = {
     (await axiosInstance.get<TUser[]>(`/users?spaceId=${spaceId}`)).data,
   getAllByCategory: async (CategoryId: string) =>
     (await axiosInstance.get<TUser[]>(`/users?categoryId=${CategoryId}`)).data,
+  getAllSuperAdmins: async () =>
+    (await axiosInstance.get<TUser[]>(`/users?role=SUPER_ADMIN`)).data,
 };
 
 export const spaceFetcher = {
@@ -84,6 +86,8 @@ export const siteFetcher = {
 };
 
 export const postFetcher = {
+  getAll: async () => (await axiosInstance.get("/posts/admin")).data,
+
   getLatestPostBySpaceWithImage: async ({ spaceId }: { spaceId: string }) =>
     (
       await axiosInstance.get<TPost[]>(
