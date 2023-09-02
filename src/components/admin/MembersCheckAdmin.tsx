@@ -86,7 +86,7 @@ export default function FullFeaturedCrudGrid({ data, teams }: TData) {
       birthday: new Date(user.birthday),
       role: user.role,
       workLocation: user.workLocation,
-      teamName: user.team.name,
+      teamName: user.team?.name,
       imageUrl: user.imageUrl,
       isDisabled: user.isDisabled,
     }))
@@ -144,7 +144,9 @@ export default function FullFeaturedCrudGrid({ data, teams }: TData) {
         teamId: teams.find((team: any) => team.name === newRow.teamName).id,
         imageUrl:
           "https://res.cloudinary.com/tomahawkiwi/image/upload/v1693666511/enedis-share-2023-pour-titre/profileImages/istockphoto-1456244103-612x612_oto95u.webp",
+        site: "88aab5a1-4d7d-412e-9da2-0f082e569dfd",
       };
+
       const newUser = userPoster.post(payloadNewUser);
       return newUser;
     }
