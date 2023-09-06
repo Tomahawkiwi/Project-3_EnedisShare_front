@@ -27,6 +27,14 @@ export const imageFetcher = {
       },
     }),
 };
+export const imageFetcherSpace = {
+  post: async (formData: FormData) =>
+    await axiosInstance.post<TImage>("/images/space", formData, {
+      headers: {
+        "Content-type": "multipart/form-data",
+      },
+    }),
+};
 
 export const categoryFetcher = {
   post: async (formData: FormData) =>

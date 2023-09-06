@@ -1,35 +1,30 @@
 import { Button, CircularProgress } from "@mui/material";
 import { GridRenderCellParams } from "@mui/x-data-grid";
 import Image from "next/image";
-import React, { useEffect } from "react";
-import { spaceUpdater } from "../../utils/updater";
-import { spaceFetcher } from "../../utils/fetcher";
+import React, { Dispatch } from "react";
+import { imageFetcherSpace } from "../../utils/poster";
 
-type Props = { params: GridRenderCellParams };
+type Props = {
+  params: GridRenderCellParams;
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
+  setActualImage: Dispatch<React.SetStateAction<string | undefined>>;
+  actualImage?: string;
+};
 
-function SpaceImage({ params }: Props) {
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [actualImage, setActualImage] = React.useState("");
-  const [updatedImage, setUpdatedImage] = React.useState("");
-
-  useEffect(() => {
-    const fetchSpaceImage = async () => {
-      const data = await spaceFetcher.getOne(params.row.id);
-      setActualImage(data.imageUrl);
-    };
-    fetchSpaceImage();
-    setIsLoading(false);
-  }, []);
-
+function SpaceImage({
+  params,
+  isLoading,
+  setIsLoading,
+  setActualImage,
+  actualImage,
+}: Props) {
   const handleImageChange = async (imageFile: File) => {
     const formData = new FormData();
     setIsLoading(true);
-    formData.append("imageUrl", imageFile as File);
-    const spaceUpdated = await spaceUpdater.spaceImageUpdaterByAdmin(
-      params.row.id,
-      formData
-    );
-    setUpdatedImage(spaceUpdated.data.imageUrl);
+    formData.append("postImage", imageFile as File);
+    const uploadImage = await imageFetcherSpace.post(formData);
+    setActualImage(uploadImage.data.url);
     setIsLoading(false);
   };
 
@@ -42,7 +37,7 @@ function SpaceImage({ params }: Props) {
       <Image
         alt={`Cover picture of ${params.row.name}`}
         fill
-        src={updatedImage !== "" ? updatedImage : actualImage}
+        src={params.row.imageUrl ?? actualImage}
         className="object-contain"
       />
       <Button
