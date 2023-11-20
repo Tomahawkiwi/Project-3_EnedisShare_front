@@ -15,7 +15,7 @@ __LANGUAGE__ : Typescript <img height="20" alt="logo Typescript" src="https://up
 __FRAMEWORK FRONT__ : NextJS <img height="20" alt="logo NextJS" src="https://d2nir1j4sou8ez.cloudfront.net/wp-content/uploads/2021/12/nextjs-boilerplate-logo.png">  
 __CSS__ : Tailwind CSS <img height="20" alt="logo Tailwind" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Tailwind_CSS_Logo.svg/1024px-Tailwind_CSS_Logo.svg.png">, Framer Motion <img height="20" alt="logo Motion" src="https://camo.githubusercontent.com/179d66ab2b0321726c88a586c4ad38802e7113a3c98c6fd3f0156c01c98cfd14/68747470733a2f2f6672616d657275736572636f6e74656e742e636f6d2f696d616765732f34386861395a52396f5a51475136675a38595566456c50335430412e706e67">  
 __DESIGN__ : Figma <img height="20" alt="logo Figma" src="https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg">  
-__PROD__ : Deployed on Vercel <img height="20" alt="logo Vercel" src="https://camo.githubusercontent.com/add2c9721e333f0043ac938f3dadbc26a282776e01b95b308fcaba5afaf74ae3/68747470733a2f2f6173736574732e76657263656c2e636f6d2f696d6167652f75706c6f61642f76313538383830353835382f7265706f7369746f726965732f76657263656c2f6c6f676f2e706e67">  
+__PROD__ : Vercel <img height="20" alt="logo Vercel" src="https://camo.githubusercontent.com/add2c9721e333f0043ac938f3dadbc26a282776e01b95b308fcaba5afaf74ae3/68747470733a2f2f6173736574732e76657263656c2e636f6d2f696d6167652f75706c6f61642f76313538383830353835382f7265706f7369746f726965732f76657263656c2f6c6f676f2e706e67">  
 
 
 ## App overview
