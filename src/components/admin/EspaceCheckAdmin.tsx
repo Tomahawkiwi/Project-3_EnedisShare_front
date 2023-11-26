@@ -51,7 +51,13 @@ function EditToolbar(props: EditToolbarProps) {
     const id = uuid();
     setRows((oldRows) => [
       ...oldRows,
-      { id, name: "", description: "", ImageUrl: "", isNew: true },
+      {
+        id,
+        name: "",
+        description: "",
+        ImageUrl: "",
+        isNew: true,
+      },
     ]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
@@ -69,6 +75,8 @@ function EditToolbar(props: EditToolbarProps) {
 }
 
 function EspaceCheckAdmin({ data }: TDataProps) {
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [actualImage, setActualImage] = React.useState<string>();
   const [rows, setRows] = React.useState(
     data.map((space: TSpace) => ({
       id: space.id,
@@ -124,7 +132,7 @@ function EspaceCheckAdmin({ data }: TDataProps) {
       const PayloadNewSpace = {
         name: newRow.name,
         description: newRow.description,
-        imageUrl: newRow.imageUrl || "Donnez une url d'image",
+        imageUrl: actualImage,
         ownerId: "3cddf358-71fb-4676-af8c-33293801bec0",
         siteId: "88aab5a1-4d7d-412e-9da2-0f082e569dfd",
       };
@@ -135,6 +143,7 @@ function EspaceCheckAdmin({ data }: TDataProps) {
       id: newRow.id,
       name: newRow.name,
       description: newRow.description,
+      imageUrl: actualImage,
     };
     setRows(
       rows.map((row: TSpace) => (row.id === newRow.id ? rowToUpdate : row))
@@ -169,7 +178,15 @@ function EspaceCheckAdmin({ data }: TDataProps) {
       width: 160,
       editable: false,
       renderCell: (params) => {
-        return <SpaceImage params={params} />;
+        return (
+          <SpaceImage
+            params={params}
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
+            setActualImage={setActualImage}
+            actualImage={actualImage}
+          />
+        );
       },
     },
     {
