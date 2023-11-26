@@ -4,7 +4,7 @@ import { TUser } from "../types/main";
 
 const authProvider: AuthProvider = {
   login: async ({ username, password }) => {
-    const superAdmins = await userFetcher.getAllSuperAdmins();
+    const superAdmins = await userFetcher.getAllSuperAdminsFromAdmin();
 
     const stringsSuperAdmins: any[] = [];
     superAdmins.map((superAdmin: TUser) =>

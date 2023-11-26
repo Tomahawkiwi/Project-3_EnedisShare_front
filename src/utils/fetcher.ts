@@ -22,8 +22,11 @@ export const userFetcher = {
     (await axiosInstance.get<TUser[]>(`/users?spaceId=${spaceId}`)).data,
   getAllByCategory: async (CategoryId: string) =>
     (await axiosInstance.get<TUser[]>(`/users?categoryId=${CategoryId}`)).data,
-  getAllSuperAdmins: async () =>
-    (await axiosInstance.get<TUser[]>(`/users?role=SUPER_ADMIN`)).data,
+  getAllFromAdmin: async () =>
+    (await axiosInstance.get("/users?fromAdmin=true")).data,
+  getAllSuperAdminsFromAdmin: async () =>
+    (await axiosInstance.get<TUser[]>("/users?role=SUPER_ADMIN?fromAdmin=true"))
+      .data,
 };
 
 export const spaceFetcher = {
@@ -40,6 +43,8 @@ export const spaceFetcher = {
         `/spaces/${id}?categories=true&owner=true`
       )
     ).data,
+  getAllFromAdmin: async () =>
+    (await axiosInstance.get<[TSpace]>("/spaces?fromAdmin=true")).data,
 };
 
 export const categoryFetcher = {
@@ -51,6 +56,8 @@ export const categoryFetcher = {
     (await axiosInstance.get<TCategory>(`/categories/${id}`)).data,
   getOneWithSpace: async (id: string) =>
     (await axiosInstance.get<TCategory>(`/categories/${id}?space=true`)).data,
+  getAllFromAdmin: async () =>
+    (await axiosInstance.get<TCategory[]>("/categories?fromAdmin=true")).data,
 
   addUserToCategory: async (categoryId: string, usersToConnect: string[]) =>
     (
@@ -72,7 +79,8 @@ export const categoryFetcher = {
 };
 
 export const teamFetcher = {
-  getAll: async () => (await axiosInstance.get<TTeam>("/teams")).data,
+  getAllFromAdmin: async () =>
+    (await axiosInstance.get<TTeam>("/teams?fromAdmin=true")).data,
   getOne: async (id: string) =>
     (await axiosInstance.get<TOneTeam>(`/teams/${id}`)).data,
   getOneTeamAllMembers: async (id: string) =>
@@ -86,7 +94,8 @@ export const siteFetcher = {
 };
 
 export const postFetcher = {
-  getAll: async () => (await axiosInstance.get("/posts/admin")).data,
+  getAllFromAdmin: async () =>
+    (await axiosInstance.get("/posts?fromAdmin=true")).data,
 
   getLatestPostBySpaceWithImage: async ({ spaceId }: { spaceId: string }) =>
     (

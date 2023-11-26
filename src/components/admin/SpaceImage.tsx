@@ -2,7 +2,7 @@ import { Button, CircularProgress } from "@mui/material";
 import { GridRenderCellParams } from "@mui/x-data-grid";
 import Image from "next/image";
 import React, { Dispatch } from "react";
-import { imageFetcherSpace } from "../../utils/poster";
+import { spaceImageFetcher } from "../../utils/poster";
 
 type Props = {
   params: GridRenderCellParams;
@@ -23,7 +23,7 @@ function SpaceImage({
     const formData = new FormData();
     setIsLoading(true);
     formData.append("postImage", imageFile as File);
-    const uploadImage = await imageFetcherSpace.post(formData);
+    const uploadImage = await spaceImageFetcher.post(formData);
     setActualImage(uploadImage.data.url);
     setIsLoading(false);
   };

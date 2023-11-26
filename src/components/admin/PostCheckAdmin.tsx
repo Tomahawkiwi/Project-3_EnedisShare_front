@@ -117,7 +117,7 @@ function PostCheckAdmin({ data }: PostCheckAdminProps) {
 
   const handleDeleteClick = (id: GridRowId) => () => {
     setRows(rows.filter((row: TPosts) => row.id !== id));
-    const postToDelete = postDeleter.delete(id as string);
+    const postToDelete = postDeleter.deleteFromAdmin(id as string);
     return postToDelete;
   };
 
@@ -155,32 +155,43 @@ function PostCheckAdmin({ data }: PostCheckAdminProps) {
   }, []);
 
   const columns: GridColDef[] = [
-    { field: "title", headerName: "Titre", width: 220, editable: true },
+    {
+      field: "title",
+      headerName: "Titre",
+      width: 220,
+      editable: true,
+      cellClassName: () => "text-blue-enedis",
+    },
     {
       field: "content",
       headerName: "Contenu",
       width: 220,
+      cellClassName: () => "text-dark-enedis text-opacity-40",
     },
     {
       field: "author",
       headerName: "Auteur",
       width: 300,
+      cellClassName: () => "text-dark-enedis text-opacity-40",
     },
     {
       field: "categorie",
       headerName: "Categorie",
       width: 220,
+      cellClassName: () => "text-dark-enedis text-opacity-40",
     },
     {
       field: "space",
       headerName: "Espace",
       width: 220,
+      cellClassName: () => "text-dark-enedis text-opacity-40",
     },
     {
       field: "isDisabled",
       headerName: "Desactiver",
       width: 220,
       renderEditCell: renderSelectEditInputCell,
+      cellClassName: () => "text-blue-enedis",
       editable: true,
     },
     {

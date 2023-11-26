@@ -9,7 +9,7 @@ function SpacesAdmin() {
     isLoading,
     error,
     data: AllSpaces,
-  } = useQuery(["getAllSpaces"], () => spaceFetcher.getAll());
+  } = useQuery(["getAllSpaces"], () => spaceFetcher.getAllFromAdmin());
 
   if (isLoading) {
     return <LoaderFocus />;

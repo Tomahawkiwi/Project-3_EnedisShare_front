@@ -25,6 +25,7 @@ import { spaceUpdater } from "../../utils/updater";
 import { spaceDeleter } from "../../utils/deleter";
 import { spacePoster } from "../../utils/poster";
 import SpaceImage from "./SpaceImage";
+import { useAuth } from "../../context/UserContext";
 
 type TDataProps = {
   data: any;
@@ -88,6 +89,7 @@ function EspaceCheckAdmin({ data }: TDataProps) {
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
     {}
   );
+  const { user } = useAuth();
 
   const handleRowEditStop: GridEventListener<"rowEditStop"> = (
     params,
@@ -111,7 +113,7 @@ function EspaceCheckAdmin({ data }: TDataProps) {
 
   const handleDeleteClick = (id: GridRowId) => () => {
     setRows(rows.filter((row: TSpace) => row.id !== id));
-    const SpaceToDelete = spaceDeleter.delete(id as string);
+    const SpaceToDelete = spaceDeleter.deleteFromAdmin(id as string);
     return SpaceToDelete;
   };
 
@@ -133,7 +135,7 @@ function EspaceCheckAdmin({ data }: TDataProps) {
         name: newRow.name,
         description: newRow.description,
         imageUrl: actualImage,
-        ownerId: "3cddf358-71fb-4676-af8c-33293801bec0",
+        ownerId: user!.id,
         siteId: "88aab5a1-4d7d-412e-9da2-0f082e569dfd",
       };
       const newSpace = spacePoster.post(PayloadNewSpace);
@@ -164,11 +166,17 @@ function EspaceCheckAdmin({ data }: TDataProps) {
   }, []);
 
   const columns: GridColDef[] = [
-    { field: "name", headerName: "Nom", width: 200, editable: true },
+    {
+      field: "name",
+      headerName: "Nom",
+      width: 200,
+      cellClassName: () => "text-blue-enedis",
+      editable: true,
+    },
     {
       field: "description",
       headerName: "Description",
-      cellClassName: "!whitespace-normal text-left",
+      cellClassName: "!whitespace-normal text-left text-blue-enedis",
       width: 250,
       editable: true,
     },

@@ -9,13 +9,13 @@ function UsersAdmin() {
     isLoading,
     error,
     data: Alluser,
-  } = useQuery(["getAllUser"], () => userFetcher.getAll());
+  } = useQuery(["getAllUser"], () => userFetcher.getAllFromAdmin());
 
   const {
     isLoading: isLoadingTeam,
     error: errorTeam,
     data: AllTeams,
-  } = useQuery(["getAllTeams"], () => teamFetcher.getAll());
+  } = useQuery(["getAllTeams"], () => teamFetcher.getAllFromAdmin());
 
   if (isLoadingTeam) {
     return <LoaderFocus />;
