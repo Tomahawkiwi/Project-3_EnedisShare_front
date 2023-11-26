@@ -27,13 +27,17 @@ export const imageFetcher = {
       },
     }),
 };
-export const imageFetcherSpace = {
+export const spaceImageFetcher = {
   post: async (formData: FormData) =>
-    await axiosInstance.post<TImage>("/images/space", formData, {
-      headers: {
-        "Content-type": "multipart/form-data",
-      },
-    }),
+    await axiosInstance.post<TImage>(
+      "/spaces/uploadImage?fromAdmin=true",
+      formData,
+      {
+        headers: {
+          "Content-type": "multipart/form-data",
+        },
+      }
+    ),
 };
 
 export const categoryFetcher = {
@@ -59,7 +63,8 @@ export const commentFetcher = {
 };
 
 export const spacePoster = {
-  post: async (data: any) => await axiosInstance.post("/spaces/admin", data),
+  post: async (data: any) =>
+    await axiosInstance.post("/spaces?fromAdmin=true", data),
 };
 
 export const userPoster = {

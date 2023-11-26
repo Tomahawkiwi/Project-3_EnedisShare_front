@@ -39,7 +39,6 @@ type Tcategorie = {
 export default function CategorieCheckAdmin({
   data,
 }: CategorieCheckAdminProps) {
-  console.log(data);
   const [rows, setRows] = React.useState(
     data.map((categorie: Tcategorie) => ({
       id: categorie.id,
@@ -76,7 +75,7 @@ export default function CategorieCheckAdmin({
 
   const handleDeleteClick = (id: GridRowId) => () => {
     setRows(rows.filter((row: Tcategorie) => row.id !== id));
-    const CategorieToDelete = CategoryDeleter.delete(id as string);
+    const CategorieToDelete = CategoryDeleter.deleteFromAdmin(id as string);
     return CategorieToDelete;
   };
 
@@ -116,27 +115,37 @@ export default function CategorieCheckAdmin({
     console.log(error);
   }, []);
   const columns: GridColDef[] = [
-    { field: "name", headerName: "Name", width: 220, editable: true },
+    {
+      field: "name",
+      headerName: "Name",
+      width: 220,
+      cellClassName: () => "text-blue-enedis",
+      editable: true,
+    },
     {
       field: "space",
       headerName: "Space",
       width: 220,
+      cellClassName: () => "text-dark-enedis text-opacity-40",
     },
     {
       field: "description",
       headerName: "Description",
       width: 300,
       editable: true,
+      cellClassName: () => "text-blue-enedis",
     },
     {
       field: "owner",
       headerName: "Owner",
       width: 220,
+      cellClassName: () => "text-dark-enedis text-opacity-40",
     },
     {
       field: "isGeneral",
       headerName: "Is General",
       width: 220,
+      cellClassName: () => "text-dark-enedis text-opacity-40",
     },
     {
       field: "actions",

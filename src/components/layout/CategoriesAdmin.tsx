@@ -9,7 +9,7 @@ function CategoriesAdmin() {
     data: allCategories,
     isLoading,
     isError,
-  } = useQuery(["allCategories"], () => categoryFetcher.getAll(), {});
+  } = useQuery(["allCategories"], () => categoryFetcher.getAllFromAdmin(), {});
 
   if (isLoading) {
     return <LoaderFocus />;

@@ -157,6 +157,7 @@ export default function FullFeaturedCrudGrid({ data, teams }: TData) {
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
+
   const handleProcessRowUpdateError = React.useCallback((error: Error) => {
     console.log(error);
   }, []);
@@ -177,14 +178,33 @@ export default function FullFeaturedCrudGrid({ data, teams }: TData) {
         );
       },
     },
-    { field: "firstname", headerName: "Firstname", width: 100, editable: true },
-    { field: "lastname", headerName: "Lastname", width: 100, editable: true },
-    { field: "email", headerName: "Email", width: 200, editable: true },
+    {
+      field: "firstname",
+      headerName: "Firstname",
+      width: 100,
+      cellClassName: () => "text-blue-enedis",
+      editable: true,
+    },
+    {
+      field: "lastname",
+      headerName: "Lastname",
+      width: 100,
+      cellClassName: () => "text-blue-enedis",
+      editable: true,
+    },
+    {
+      field: "email",
+      headerName: "Email",
+      width: 200,
+      cellClassName: () => "text-blue-enedis",
+      editable: true,
+    },
     {
       field: "birthday",
       headerName: "Birthday",
       type: "date",
       width: 90,
+      cellClassName: () => "text-blue-enedis",
       editable: true,
     },
     {
@@ -193,12 +213,14 @@ export default function FullFeaturedCrudGrid({ data, teams }: TData) {
       width: 90,
       type: "singleSelect",
       valueOptions: roles,
+      cellClassName: () => "text-blue-enedis",
       editable: true,
     },
     {
       field: "workLocation",
       headerName: "Work Location",
       width: 90,
+      cellClassName: () => "text-blue-enedis",
       editable: true,
     },
     {
@@ -207,6 +229,7 @@ export default function FullFeaturedCrudGrid({ data, teams }: TData) {
       width: 140,
       editable: true,
       type: "singleSelect",
+      cellClassName: () => "text-blue-enedis",
       valueOptions: teams.map((team: any) => team.name),
     },
     {
@@ -214,6 +237,7 @@ export default function FullFeaturedCrudGrid({ data, teams }: TData) {
       headerName: "Disabled",
       type: "boolean",
       width: 90,
+      cellClassName: () => "text-blue-enedis",
       editable: true,
     },
     {

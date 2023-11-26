@@ -61,7 +61,10 @@ function MyProfileLeftBar() {
         </div>
         {width < 768 && (
           <div className="ml-3">
-            <CTA text="Voir mon profil" action={() => console.log("bonjour")} />
+            <CTA
+              text="Voir mon profil"
+              action={() => router.push(`/profile/${user.id}`)}
+            />
           </div>
         )}
       </div>

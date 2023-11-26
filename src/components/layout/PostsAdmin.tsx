@@ -9,7 +9,7 @@ function PostsAdmin() {
     isLoading,
     error,
     data: allPosts,
-  } = useQuery(["getAllPosts"], () => postFetcher.getAll());
+  } = useQuery(["getAllPosts"], () => postFetcher.getAllFromAdmin());
 
   if (isLoading) {
     return <LoaderFocus />;

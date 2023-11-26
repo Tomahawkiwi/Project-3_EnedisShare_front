@@ -64,7 +64,7 @@ function Navbar() {
     { text: "Me déconnecter", link: `/auth/signin`, action: handleSearchBar },
   ];
 
-  if (user.role === "SUPER_ADMIN") {
+  if (user.role === "ADMIN" || user.role === "SUPER_ADMIN") {
     menu.splice(-1, 0, {
       text: "Back-office",
       link: "/admin",
