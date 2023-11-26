@@ -54,23 +54,26 @@ function Navbar() {
 
   const { imageUrl: freshImageUrl } = dataFreshUser;
 
-  const menu: {
-    text: string;
-    link: string;
-    action: () => void;
-  }[] = [
+  const menu = [
     {
       text: "Mon profil",
       link: `/profile/${user.id}`,
       action: handleSearchBar,
     },
     { text: "Paramètres", link: `/profile/settings`, action: handleSearchBar },
-    { text: "Aide", link: "", action: handleSearchBar },
-    { text: "Me déconnecter", link: `/auth/sigin`, action: handleSearchBar },
+    { text: "Me déconnecter", link: `/auth/signin`, action: handleSearchBar },
   ];
 
+  if (user.role === "ADMIN" || user.role === "SUPER_ADMIN") {
+    menu.splice(-1, 0, {
+      text: "Back-office",
+      link: "/admin",
+      action: handleSearchBar,
+    });
+  }
+
   return (
-    <div className="w-full flex justify-between ">
+    <div className="w-full flex justify-between">
       {/* Modal component */}
       <Modal isShowing={isShowing} hide={toggle}>
         <div className="flex-x-center space-y-3" ref={ref}>
